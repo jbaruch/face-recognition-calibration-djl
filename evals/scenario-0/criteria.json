@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent implements the piecewise confidence formula with correct calibration constants for DJL face_feature cosine distance, avoids the textbook linear formula, and correctly separates the threshold-based identity decision from the continuous confidence measure.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Piecewise lower bound",
+      "description": "confidenceOf returns 1.0 for d <= 0.30 (strong match flat region)",
+      "max_score": 12
+    },
+    {
+      "name": "Piecewise upper bound",
+      "description": "confidenceOf returns 0.0 for d >= 0.65 (reject boundary is 0.65, not 0.60)",
+      "max_score": 12
+    },
+    {
+      "name": "Piecewise linear region",
+      "description": "confidenceOf uses (0.65 - d) / 0.35 for the middle region (divisor is 0.35)",
+      "max_score": 10
+    },
+    {
+      "name": "No textbook formula",
+      "description": "Does NOT use the pattern `1 - d / TOL` or `1f - dist / 0.6f` (or any variant with a single tolerance divisor) for the confidence calculation",
+      "max_score": 10
+    },
+    {
+      "name": "Identity threshold 0.60",
+      "description": "identityLabel uses 0.60 as the threshold to decide 'unknown' vs a named label (discrete identity decision)",
+      "max_score": 10
+    },
+    {
+      "name": "Threshold vs confidence separation",
+      "description": "The identity threshold (0.60) and the confidence function (confidenceOf) are implemented as separate mechanisms — not collapsed into one formula",
+      "max_score": 8
+    },
+    {
+      "name": "Cosine distance formula",
+      "description": "cosineDistance returns 1 - dot(a, b), treating the inputs as L2-normalized (d = 1 - dot product, not 1 - magnitude ratio)",
+      "max_score": 10
+    },
+    {
+      "name": "Correct rejects upper bound in comments",
+      "description": "Code or comments explain the 0.65 upper bound specifically for DJL face_feature (not 0.60 from dlib-based calibration)",
+      "max_score": 8
+    },
+    {
+      "name": "Calibration explanation",
+      "description": "Comments or documentation mention that the linear formula compresses strong matches (d=0.20-0.30) into the middle band",
+      "max_score": 10
+    },
+    {
+      "name": "Correct cosine distance semantics",
+      "description": "Code treats lower cosine distance as a stronger match (not higher), i.e., finds the minimum distance match in identityLabel",
+      "max_score": 10
+    }
+  ]
+}

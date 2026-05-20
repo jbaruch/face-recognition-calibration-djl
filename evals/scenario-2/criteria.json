@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent implements frame-drop persistence (~0.8s hold before no-face), garbage detection using the 0.85 distance threshold, and a diagnostic mode that logs distances to all enrolled people with correct interpretation thresholds.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "No-face hold duration",
+      "description": "shouldDeclareNoFace or the persistence constant uses ~800ms (0.8 seconds) as the hold time before declaring 'no face'",
+      "max_score": 12
+    },
+    {
+      "name": "Persistence mechanism",
+      "description": "shouldDeclareNoFace returns false (does not declare no-face) if the elapsed time since last detection is less than the hold duration",
+      "max_score": 10
+    },
+    {
+      "name": "Garbage threshold 0.85",
+      "description": "isGarbageDetection returns true for cosine distance > 0.85 (Haar false-positive threshold)",
+      "max_score": 12
+    },
+    {
+      "name": "Garbage drops detection",
+      "description": "Code or comments indicate that garbage detections (dist > 0.85) should be dropped entirely, not treated as 'unknown' faces",
+      "max_score": 8
+    },
+    {
+      "name": "Diagnostic logs all enrolled",
+      "description": "runDiagnosticMode logs the distance to every enrolled person, not just the closest match",
+      "max_score": 10
+    },
+    {
+      "name": "Diagnostic distance format",
+      "description": "Diagnostic output formats distances to 3 decimal places (e.g., %.3f or similar precision)",
+      "max_score": 6
+    },
+    {
+      "name": "True identity threshold in diagnostics",
+      "description": "Comments or diagnostic output interpretation mention that true identity distance should be < 0.45",
+      "max_score": 8
+    },
+    {
+      "name": "Others threshold in diagnostics",
+      "description": "Comments or diagnostic output interpretation mention that other enrolled people's distances should be > 0.55",
+      "max_score": 8
+    },
+    {
+      "name": "Spread check in diagnostics",
+      "description": "Comments or diagnostic interpretation mention checking that the spread between true match and next-closest is > 0.15",
+      "max_score": 8
+    },
+    {
+      "name": "Distance semantics correct",
+      "description": "isGarbageDetection and persistence logic treat lower distance as a better match (not higher), consistent with cosine distance semantics",
+      "max_score": 8
+    },
+    {
+      "name": "Hold constant named clearly",
+      "description": "The 0.8s hold duration is defined as a named constant (not a magic number inline)",
+      "max_score": 10
+    }
+  ]
+}
